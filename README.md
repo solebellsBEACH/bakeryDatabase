@@ -4,96 +4,96 @@ Bem-vindo ao repositório **BakeryDatabase**, um banco de dados projetado para g
 
 ## Estrutura do Banco de Dados
 
-### Tabela: Produtos
+### Tabela: Products
 
-A tabela **Produtos** armazena informações sobre os itens disponíveis na padaria.
+A tabela **Products** armazena informações sobre os itens disponíveis na padaria.
 
-| Coluna              | Tipo       | Descrição                     |
-|---------------------|------------|-------------------------------|
-| `ID do Produto`     | INT        | Chave Primária                |
-| `Nome do Produto`   | VARCHAR    | Nome do produto               |
-| `Descrição`         | TEXT       | Descrição detalhada do produto|
-| `Preço`             | DECIMAL    | Preço unitário do produto     |
-| `Quantidade em Estoque` | INT    | Quantidade disponível em estoque |
+| Coluna                 | Tipo       | Descrição                     |
+|------------------------|------------|-------------------------------|
+| `Product ID`           | INT        | Chave Primária                |
+| `Product Name`         | VARCHAR    | Nome do produto               |
+| `Description`          | TEXT       | Descrição detalhada do produto|
+| `Price`                | DECIMAL    | Preço unitário do produto     |
+| `Stock Quantity`       | INT        | Quantidade disponível em estoque |
 
-### Tabela: Clientes
+### Tabela: Customers
 
-A tabela **Clientes** armazena informações dos clientes da padaria.
+A tabela **Customers** armazena informações dos clientes da padaria.
 
-| Coluna           | Tipo       | Descrição                     |
-|------------------|------------|-------------------------------|
-| `ID do Cliente`  | INT        | Chave Primária                |
-| `Nome`           | VARCHAR    | Nome do cliente               |
-| `Endereço`       | TEXT       | Endereço do cliente           |
-| `E-mail`         | VARCHAR    | E-mail do cliente             |
-| `Telefone`       | VARCHAR    | Número de telefone do cliente |
+| Coluna            | Tipo       | Descrição                     |
+|-------------------|------------|-------------------------------|
+| `Customer ID`     | INT        | Chave Primária                |
+| `Name`            | VARCHAR    | Nome do cliente               |
+| `Address`         | TEXT       | Endereço do cliente           |
+| `Email`           | VARCHAR    | E-mail do cliente             |
+| `Phone`           | VARCHAR    | Número de telefone do cliente |
 
-### Tabela: Pedidos
+### Tabela: Orders
 
-A tabela **Pedidos** armazena informações sobre os pedidos realizados pelos clientes.
+A tabela **Orders** armazena informações sobre os pedidos realizados pelos clientes.
 
-| Coluna           | Tipo       | Descrição                                  |
-|------------------|------------|--------------------------------------------|
-| `ID do Pedido`   | INT        | Chave Primária                             |
-| `ID do Cliente`  | INT        | Chave Estrangeira referenciando a tabela Clientes |
-| `Data e Hora do Pedido` | DATETIME | Data e hora em que o pedido foi realizado |
-| `Status do Pedido` | VARCHAR  | Status do pedido (por exemplo, pendente, entregue, cancelado) |
+| Coluna              | Tipo       | Descrição                                  |
+|---------------------|------------|--------------------------------------------|
+| `Order ID`          | INT        | Chave Primária                             |
+| `Customer ID`       | INT        | Chave Estrangeira referenciando a tabela Customers |
+| `Order Date Time`   | DATETIME   | Data e hora em que o pedido foi realizado  |
+| `Order Status`      | VARCHAR    | Status do pedido (por exemplo, pendente, entregue, cancelado) |
 
-### Tabela: Itens do Pedido
+### Tabela: Order Items
 
-A tabela **Itens do Pedido** armazena informações sobre os produtos incluídos em cada pedido.
+A tabela **Order Items** armazena informações sobre os produtos incluídos em cada pedido.
 
-| Coluna           | Tipo       | Descrição                                  |
-|------------------|------------|--------------------------------------------|
-| `ID do Item`     | INT        | Chave Primária                             |
-| `ID do Pedido`   | INT        | Chave Estrangeira referenciando a tabela Pedidos |
-| `ID do Produto`  | INT        | Chave Estrangeira referenciando a tabela Produtos |
-| `Quantidade`     | INT        | Quantidade do produto no pedido            |
-| `Preço Unitário` | DECIMAL    | Preço unitário do produto no momento do pedido |
+| Coluna            | Tipo       | Descrição                                  |
+|-------------------|------------|--------------------------------------------|
+| `Item ID`         | INT        | Chave Primária                             |
+| `Order ID`        | INT        | Chave Estrangeira referenciando a tabela Orders |
+| `Product ID`      | INT        | Chave Estrangeira referenciando a tabela Products |
+| `Quantity`        | INT        | Quantidade do produto no pedido            |
+| `Unit Price`      | DECIMAL    | Preço unitário do produto no momento do pedido |
 
 ## Relacionamentos
 
-- A tabela **Pedidos** tem uma chave estrangeira `ID do Cliente` que referencia a tabela **Clientes**, indicando qual cliente fez o pedido.
-- A tabela **Itens do Pedido** tem uma chave estrangeira `ID do Pedido` que referencia a tabela **Pedidos**, indicando a qual pedido o item pertence.
-- A tabela **Itens do Pedido** também tem uma chave estrangeira `ID do Produto` que referencia a tabela **Produtos**, indicando qual produto foi incluído no pedido.
+- A tabela **Orders** tem uma chave estrangeira `Customer ID` que referencia a tabela **Customers**, indicando qual cliente fez o pedido.
+- A tabela **Order Items** tem uma chave estrangeira `Order ID` que referencia a tabela **Orders**, indicando a qual pedido o item pertence.
+- A tabela **Order Items** também tem uma chave estrangeira `Product ID` que referencia a tabela **Products**, indicando qual produto foi incluído no pedido.
 
 ## Scripts SQL
 
 ### Criação das Tabelas
 
 ```sql
-CREATE TABLE Produtos (
-    ID_Produto INT PRIMARY KEY,
-    Nome_Produto VARCHAR(100) NOT NULL,
-    Descricao TEXT,
-    Preco DECIMAL(10, 2) NOT NULL,
-    Quantidade_em_Estoque INT NOT NULL
+CREATE TABLE Products (
+    Product_ID INT PRIMARY KEY,
+    Product_Name VARCHAR(100) NOT NULL,
+    Description TEXT,
+    Price DECIMAL(10, 2) NOT NULL,
+    Stock_Quantity INT NOT NULL
 );
 
-CREATE TABLE Clientes (
-    ID_Cliente INT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Endereco TEXT NOT NULL,
+CREATE TABLE Customers (
+    Customer_ID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Address TEXT NOT NULL,
     Email VARCHAR(100),
-    Telefone VARCHAR(20)
+    Phone VARCHAR(20)
 );
 
-CREATE TABLE Pedidos (
-    ID_Pedido INT PRIMARY KEY,
-    ID_Cliente INT,
-    Data_Hora_Pedido DATETIME NOT NULL,
-    Status_Pedido VARCHAR(50) NOT NULL,
-    FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID_Cliente)
+CREATE TABLE Orders (
+    Order_ID INT PRIMARY KEY,
+    Customer_ID INT,
+    Order_Date_Time DATETIME NOT NULL,
+    Order_Status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID)
 );
 
-CREATE TABLE Itens_Pedido (
-    ID_Item INT PRIMARY KEY,
-    ID_Pedido INT,
-    ID_Produto INT,
-    Quantidade INT NOT NULL,
-    Preco_Unitario DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (ID_Pedido) REFERENCES Pedidos(ID_Pedido),
-    FOREIGN KEY (ID_Produto) REFERENCES Produtos(ID_Produto)
+CREATE TABLE Order_Items (
+    Item_ID INT PRIMARY KEY,
+    Order_ID INT,
+    Product_ID INT,
+    Quantity INT NOT NULL,
+    Unit_Price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (Order_ID) REFERENCES Orders(Order_ID),
+    FOREIGN KEY (Product_ID) REFERENCES Products(Product_ID)
 );
 ```
 
